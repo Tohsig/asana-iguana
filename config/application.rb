@@ -22,5 +22,9 @@ module AgileIguana
 
     # Do not swallow errors in after_commit/after_rollback callbacks.
     config.active_record.raise_in_transactional_callbacks = true
+
+    Asana.configure do |client|
+      client.api_key = Figaro.env.asana_api_key
+    end
   end
 end
