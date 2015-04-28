@@ -1,0 +1,12 @@
+<p>Report for <%= @start_date %> to <%= @end_date %></p>
+<p>
+  <% @report.each do |key, value| %>
+    <p>
+      <% if key != "Unassigned" %>
+        <%= key %> finished <%= value.sum %> points
+      <% else %>
+        <%= value.sum %> points were finished, but unassigned
+      <% end %>
+    </p>
+  <% end %>
+</p>

@@ -1,19 +1,18 @@
 class WorkspacesController < ApplicationController
-  def new
-  end
-
-  def index
+  def form
     api_key = params[:api_key]
-
-    base_path = set_base_path(api_key: api_key)
+    session[:api_key] = api_key
+    base_path = set_base_path(api_key)
 
     @workspaces = get_workspaces(base_path)
     @projects   = get_projects(base_path, @workspaces)
+  end
 
-
-
-    workspace  = 27301307915813
-    project    = 27329260245608
+  def report
+    api_key     = session[:api_key]
+    base_path   = set_base_path(api_key)
+    workspace   = 27301307915813
+    project     = 27329260245608
     @start_date = Date.new(2015,03,20)
     @end_date   = Date.new(2015,04,20)
 

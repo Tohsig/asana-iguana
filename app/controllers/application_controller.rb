@@ -3,7 +3,7 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
 
-  def set_base_path(api_key: api_key)
+  def set_base_path(api_key)
     RestClient::Resource.new('https://app.asana.com/api/1.0/workspaces',
                                     user: api_key, password: '')
   end
@@ -28,9 +28,11 @@ class ApplicationController < ActionController::Base
   end
 
   def get_tasks(base_path, workspace, project, start_date, end_date)
-    tasks = base_path["/#{workspace}/tasks?project=#{project}&opt_fields=tags.name,assignee.name,completed_at&completed_since=2015-03-01T00:00:00.158Z"].get
+    tasks = base_path["/#{workspace}/tasks?project=#{project}&opt_fields=tags.name,assignee.name,completed_at&completed_since=#{start_date.to_time.iso8601}"].get
     tasks = convert_to_json(tasks)
-    trim_end_date(tasks, end_date)
+    tasks = trim_end_date(tasks, end_date)
+    tasks = remove_extra_tags(tasks)
+    tasks = fix_unassigned(tasks)
   end
 
   def trim_end_date(tasks, end_date)
@@ -38,25 +40,28 @@ class ApplicationController < ActionController::Base
     tasks.select { |task| Date.parse(task['completed_at']) <= end_date }
   end
 
-  def generate_report(tasks)
-    gather_tags(tasks)
-  end
-
-  def gather_tags(tasks)
-    points = {}
+  def remove_extra_tags(tasks)
     tasks.each do |task|
       task['tags'].select! { |key, value| key['name'].to_i > 0 }
     end
-
     tasks.select! { |task| !task['tags'].empty? }
+  end
 
+  def fix_unassigned(tasks)
     tasks.each do |task|
       if task['assignee'].nil?
         task['assignee'] = {}
         task['assignee']['name'] = "Unassigned"
       end
     end
+  end
 
+  def generate_report(tasks)
+    gather_points(tasks)
+  end
+
+  def gather_points(tasks)
+    points = {}
     tasks.each do |task|
       if points[task['assignee']['name']].nil?
         points[task['assignee']['name']] = []
