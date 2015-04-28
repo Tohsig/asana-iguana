@@ -14,10 +14,10 @@ class WorkspacesController < ApplicationController
 
     workspace  = 27301307915813
     project    = 27329260245608
-    start_date = Date.new(2015,03,20)
-    end_date   = Date.new(2015,04,20)
+    @start_date = Date.new(2015,03,20)
+    @end_date   = Date.new(2015,04,20)
 
-    @tasks     = get_tasks(base_path, workspace, project, start_date, end_date)
+    @tasks     = get_tasks(base_path, workspace, project, @start_date, @end_date)
     @report    = generate_report(@tasks)
   end
 end

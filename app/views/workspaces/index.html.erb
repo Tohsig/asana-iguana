@@ -1,6 +1,10 @@
-Index Action
+Report for <%= @start_date %> to <%= @end_date %>
 <br>
 <% @report.each do |key, value| %>
-  <%= key %> finished <%= value.sum %> points
+  <% if key != "Unassigned" %>
+    <%= key %> finished <%= value.sum %> points
+  <% else %>
+    <%= value.sum %> points were finished, but unassigned
+  <% end %>
   <br>
 <% end %>
