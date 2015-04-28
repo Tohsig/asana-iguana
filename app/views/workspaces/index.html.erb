@@ -8,4 +8,17 @@ Index Action
 
 <br>
 
-<%= @projects %>
+<% @projects.each do |p| %>
+  <br>
+  <%= p['name'] %>
+  <%= p['id'] %>
+<% end %>
+
+<% @tasks.each do |t| %>
+  <br>
+  <%= t %>
+<% end %>
+
+<br>
+
+<%= @users %>
