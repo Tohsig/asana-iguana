@@ -1,24 +1,6 @@
 Index Action
 <br>
-<% @workspaces.each do |w| %>
+<% @report.each do |key, value| %>
+  <%= key %> finished <%= value.sum %> points
   <br>
-  <%= w['name'] %>
-  <%= w['id'] %>
 <% end %>
-
-<br>
-
-<% @projects.each do |p| %>
-  <br>
-  <%= p['name'] %>
-  <%= p['id'] %>
-<% end %>
-
-<% @tasks.each do |t| %>
-  <br>
-  <%= t %>
-<% end %>
-
-<br>
-
-<%= @users %>

@@ -3,54 +3,66 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
 
-  def get_workspaces(api_key)
-    resource = RestClient::Resource.new('https://app.asana.com/api/1.0/workspaces',
+  def set_base_path(api_key: api_key)
+    RestClient::Resource.new('https://app.asana.com/api/1.0/workspaces',
                                     user: api_key, password: '')
-    workspaces = resource.get
-    JSON.parse(workspaces)['data']
   end
 
-  def get_projects(api_key, workspace_id)
-    resource = RestClient::Resource.new("https://app.asana.com/api/1.0/workspaces/#{workspace_id}/projects",
-                                    user: api_key, password: '')
-    projects = resource.get
-    JSON.parse(projects)['data']
+  def convert_to_json(hash)
+    JSON.parse(hash)['data']
   end
 
-  def get_tasks(api_key, project_id)
-    resource = RestClient::Resource.new("https://app.asana.com/api/1.0/projects/#{project_id}/tasks",
-                                user: api_key, password: '')
-    tasks = resource['?opt_fields=name,assignee,completed'].get
-    JSON.parse(tasks)['data']
+  def get_workspaces(base_path)
+    workspaces = base_path.get
+    convert_to_json(workspaces)
   end
 
-  def points_tally(api_key, project_id)
-    tasks = get_tasks(api_key, project_id)
-    users = collect_users(api_key, tasks)
-    return users
+  def get_projects(base_path, workspaces)
+    all_projects = {}
+    workspaces.each do |workspace|
+      projects = base_path["/#{workspace['id']}/projects"].get
+      projects = convert_to_json(projects)
+      all_projects[workspace['id']] = projects
+    end
+    all_projects
   end
 
-  def collect_users(api_key, tasks)
-    users = []
+  def get_tasks(base_path, workspace, project, start_date, end_date)
+    tasks = base_path["/#{workspace}/tasks?project=#{project}&opt_fields=tags.name,assignee.name,completed_at&completed_since=2015-03-01T00:00:00.158Z"].get
+    tasks = convert_to_json(tasks)
+    trim_end_date(tasks, end_date)
+  end
+
+  def trim_end_date(tasks, end_date)
+    tasks.select! { |task| task['completed_at'] != nil }
+    tasks.select { |task| Date.parse(task['completed_at']) <= end_date }
+  end
+
+  def generate_report(tasks)
+    gather_tags(tasks)
+  end
+
+  def gather_tags(tasks)
+    points = {}
     tasks.each do |task|
-      if task['completed'] == true
-        users << task['assignee']
-      end
+      task['tags'].select! { |key, value| key['name'].to_i > 0 }
     end
-    users.uniq!
-    users.each do |user|
-      if user != nil
-        user[:name] = find_user_name(api_key, user['id'])
-      end
-    end
-    users
-  end
 
-  def find_user_name(api_key, user_id)
-    resource = RestClient::Resource.new("https://app.asana.com/api/1.0/users/#{user_id}",
-                                    user: api_key, password: '')
-    user = resource.get
-    user = JSON.parse(user)['data']
-    user['name']
+    tasks.select! { |task| !task['tags'].empty? }
+
+    tasks.each do |task|
+      if task['assignee'].nil?
+        task['assignee'] = {}
+        task['assignee']['name'] = "Unassigned"
+      end
+    end
+
+    tasks.each do |task|
+      if points[task['assignee']['name']].nil?
+        points[task['assignee']['name']] = []
+      end
+      points[task['assignee']['name']] << task['tags'].first['name'].to_i
+    end
+    points
   end
 end
