@@ -3,8 +3,12 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
 
+  def key_valid?(api_key)
+
+  end
+
   def set_base_path(api_key)
-    RestClient::Resource.new('https://app.asana.com/api/1.0/workspaces',
+    RestClient::Resource.new('https://app.asana.com/api/1.0/',
                                     user: api_key, password: '')
   end
 
@@ -12,27 +16,32 @@ class ApplicationController < ActionController::Base
     JSON.parse(hash)['data']
   end
 
-  def get_workspaces(base_path)
-    workspaces = base_path.get
-    convert_to_json(workspaces)
-  end
-
   def get_projects(base_path, workspaces)
-    all_projects = {}
-    workspaces.each do |workspace|
-      projects = base_path["/#{workspace['id']}/projects"].get
-      projects = convert_to_json(projects)
-      all_projects[workspace['id']] = projects
+    begin
+      projects = base_path['projects?opt_fields=name,workspace.name,team.name&archived=false'].get
+    rescue => e
+      case
+      when e.message.include?("401")
+        flash[:error] = "Sorry, Asana doesn't recognize that API key."
+      else
+        flash[:error] = "Sorry, we seem to be having trouble contacting Asana.\nTry again later!"
+      end
+      return false
     end
-    all_projects
+    convert_to_json(projects)
   end
 
-  def get_tasks(base_path, workspace, project, start_date, end_date)
-    tasks = base_path["/#{workspace}/tasks?project=#{project}&opt_fields=tags.name,assignee.name,completed_at&completed_since=#{start_date.to_time.iso8601}"].get
-    tasks = convert_to_json(tasks)
-    tasks = trim_end_date(tasks, end_date)
-    tasks = remove_extra_tags(tasks)
-    tasks = fix_unassigned(tasks)
+  def get_tasks(base_path, project, start_date, end_date)
+    begin
+      tasks = base_path["projects/#{project}/tasks?opt_fields=tags.name,assignee.name,completed_at&completed_since=#{start_date.to_time.iso8601}"].get
+    rescue => e
+      flash[:error] = "Sorry, something went wrong."
+    end
+
+    tasks.empty? ? false : tasks = convert_to_json(tasks)
+    tasks.empty? ? false : tasks = trim_end_date(tasks, end_date)
+    tasks.empty? ? false : tasks = remove_extra_tags(tasks)
+    tasks.empty? ? false : tasks = fix_unassigned(tasks)
   end
 
   def trim_end_date(tasks, end_date)

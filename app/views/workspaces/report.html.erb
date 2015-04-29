@@ -1,12 +1,27 @@
+<h1><%= @project_name %></h1>
+<%= form_tag({controller: "workspaces", action: "report"}, method: "get", class: "nifty_form") do %>
+  <%= hidden_field_tag "project[id]", @project_id %>
+  <%= hidden_field_tag "project[name]", @project_name %>
+  <%= label_tag :start_date, "Start Date" %>
+  <%= date_field_tag "project[start_date]", @start_date %>
+  <%= label_tag :end_date, "End Date" %>
+  <%= date_field_tag "project[end_date]", @end_date %>
+  <%= submit_tag "Change Dates" %>
+<% end %>
+
 <p>Report for <%= @start_date %> to <%= @end_date %></p>
 <p>
-  <% @report.each do |key, value| %>
-    <p>
-      <% if key != "Unassigned" %>
-        <%= key %> finished <%= value.sum %> points
-      <% else %>
-        <%= value.sum %> points were finished, but unassigned
-      <% end %>
-    </p>
+  <% if @report %>
+    <% @report.each do |key, value| %>
+      <p>
+        <% if key != "Unassigned" %>
+          <%= key %> finished <%= value.sum %> points
+        <% else %>
+          <%= value.sum %> points were finished, but unassigned
+        <% end %>
+      </p>
+    <% end %>
+  <% else %>
+    <p>No tasks with points for this date range.</p>
   <% end %>
 </p>

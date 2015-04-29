@@ -1,10 +1,19 @@
-<%= form_tag({controller: "workspaces", action: "report"}, method: "get", class: "nifty_form") do %>
-  <select id="workspace" name="workspace">
-    <% @workspaces.each do |workspace| %>
-      <option value="<%= workspace['id'] %>"><%= workspace['name'] %></option>
+<% if !@projects.empty? %>
+  <% current_workspace = "" %>
+  <% current_team      = "" %>
+  <% @projects.each do |project| %>
+    <% new_workspace = project['workspace']['name'] %>
+    <% new_team      = project['team']['name'] %>
+    <% if new_workspace != current_workspace %>
+      <h1><%= "#{new_workspace}" %></h1>
+      <% current_workspace = new_workspace %>
     <% end %>
-  </select>
-  <%= submit_tag "Generate Report" %>
+    <% if new_team != current_team %>
+      <h3><%= "#{new_team}" %></h3>
+      <% current_team = new_team %>
+    <% end %>
+    <p>
+      <%= link_to project['name'], report_path(project: { id: project['id'], name: project['name']}) %>
+    </p>
+  <% end %>
 <% end %>
-
-

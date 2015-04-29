@@ -1,22 +1,46 @@
 class WorkspacesController < ApplicationController
   def form
-    api_key = params[:api_key]
-    session[:api_key] = api_key
-    base_path = set_base_path(api_key)
+    @projects = []
+    if session[:api_key].nil?
+      api_key = params[:api_key]
+      session[:api_key] = api_key
+    else
+      api_key = session[:api_key]
+    end
 
-    @workspaces = get_workspaces(base_path)
-    @projects   = get_projects(base_path, @workspaces)
+    @base_path  = set_base_path(api_key)
+    @projects   = get_projects(@base_path, @workspaces)
+
+    if @projects == false
+      redirect_to root_path
+    end
   end
 
   def report
-    api_key     = session[:api_key]
-    base_path   = set_base_path(api_key)
-    workspace   = 27301307915813
-    project     = 27329260245608
-    @start_date = Date.new(2015,03,20)
-    @end_date   = Date.new(2015,04,20)
+    api_key       = session[:api_key]
+    base_path     = set_base_path(api_key)
+    @project_id   = project_params[:id]
+    @project_name = project_params[:name]
 
-    @tasks     = get_tasks(base_path, workspace, project, @start_date, @end_date)
-    @report    = generate_report(@tasks)
+    if project_params[:start_date].nil?
+      @start_date = Date.today - Date.today.wday
+      @end_date   = Date.today
+    else
+      @start_date = Date.parse(project_params[:start_date])
+      @end_date   = Date.parse(project_params[:end_date])
+    end
+
+    @tasks = get_tasks(base_path, @project_id, @start_date, @end_date)
+
+    if @tasks
+      @report = generate_report(@tasks)
+    else
+      @report = false
+    end
   end
+
+  private
+    def project_params
+      params.require(:project).permit(:id, :name, :start_date, :end_date)
+    end
 end

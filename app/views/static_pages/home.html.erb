@@ -1,5 +1,7 @@
+<p>
 Enter your API key:
 <%= form_tag({controller: "workspaces", action: "form"}, method: "get", class: "nifty_form") do %>
   <%= text_field_tag :api_key %>
   <%= submit_tag "Get Started" %>
 <% end %>
+</p>
