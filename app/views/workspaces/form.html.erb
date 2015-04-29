@@ -1,5 +1,10 @@
-Select a workspace:
+<%= form_tag({controller: "workspaces", action: "report"}, method: "get", class: "nifty_form") do %>
+  <select id="workspace" name="workspace">
+    <% @workspaces.each do |workspace| %>
+      <option value="<%= workspace['id'] %>"><%= workspace['name'] %></option>
+    <% end %>
+  </select>
+  <%= submit_tag "Generate Report" %>
+<% end %>
 
-Select a project:
 
-<%= button_to "Generate Report", report_path %>
