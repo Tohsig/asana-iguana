@@ -1,15 +1,14 @@
 class WorkspacesController < ApplicationController
   def form
-    @projects = []
-    if session[:api_key].nil?
-      api_key = params[:api_key]
-      session[:api_key] = api_key
+    if session[:api_key].empty?
+      api_key           = user_params[:api_key]
+      session[:api_key] = user_params[:api_key]
     else
       api_key = session[:api_key]
     end
 
-    @base_path  = set_base_path(api_key)
-    @projects   = get_projects(@base_path, @workspaces)
+    base_path  = set_base_path(api_key)
+    @projects   = get_projects(base_path, @workspaces)
 
     if @projects == false
       redirect_to root_path
@@ -42,5 +41,9 @@ class WorkspacesController < ApplicationController
   private
     def project_params
       params.require(:project).permit(:id, :name, :start_date, :end_date)
+    end
+
+    def user_params
+      params.require(:user).permit(:api_key)
     end
 end

@@ -7,12 +7,17 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
-  <%= link_to "Home", root_path %>
-  <%= link_to "Projects List", form_path %>
-  <% flash.each do |msg_type, msg| %>
-    <%= content_tag(:div, msg, class: "alert alert-#{msg_type}") %>
-  <% end %>
-  <%= yield %>
-
+  <%= render 'layouts/header' %>
+  <div class="container">
+    <div class="row" >
+      <div class="col-xs-12 text-center">
+        <% flash.each do |msg_type, msg| %>
+          <%= content_tag(:div, msg, class: "alert alert-#{msg_type}") %>
+        <% end %>
+      </div>
+    </div>
+    <%= yield %>
+  <div class="container">
+  </div>
 </body>
 </html>

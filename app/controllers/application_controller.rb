@@ -22,9 +22,9 @@ class ApplicationController < ActionController::Base
     rescue => e
       case
       when e.message.include?("401")
-        flash[:error] = "Sorry, Asana doesn't recognize that API key."
+        flash[:danger] = "Sorry, Asana doesn't recognize that API key."
       else
-        flash[:error] = "Sorry, we seem to be having trouble contacting Asana.\nTry again later!"
+        flash[:danger] = "Sorry, we seem to be having trouble contacting Asana.\nTry again later!"
       end
       return false
     end

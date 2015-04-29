@@ -1,0 +1,11 @@
+<%= navbar do %>
+  <%= vertical do %>
+    <%= link_to 'Home', root_path %>
+  <% end %>
+  <%= horizontal do %>
+    <%= nav class: 'navbar-right' do %>
+      <%= link_to 'About', '#' %>
+      <%= link_to 'Feedback', '#' %>
+    <% end %>
+  <% end %>
+<% end %>

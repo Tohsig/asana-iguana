@@ -1,0 +1,22 @@
+@import "bootstrap-sprockets";
+@import "bootstrap";
+
+// Flash Messages
+.alert {
+  max-width: 500px;
+  margin:    auto;
+}
+
+// Elements
+.btn {
+  margin-top: 10px;
+}
+
+.date {
+  max-width: 160px;
+  margin:    auto;
+}
+
+.input {
+  margin: 20px auto;
+}

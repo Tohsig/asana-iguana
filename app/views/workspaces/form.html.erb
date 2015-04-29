@@ -1,19 +1,23 @@
-<% if !@projects.empty? %>
-  <% current_workspace = "" %>
-  <% current_team      = "" %>
-  <% @projects.each do |project| %>
-    <% new_workspace = project['workspace']['name'] %>
-    <% new_team      = project['team']['name'] %>
-    <% if new_workspace != current_workspace %>
-      <h1><%= "#{new_workspace}" %></h1>
-      <% current_workspace = new_workspace %>
+<div class="row">
+  <div class="col-md-4 col-md-offset-4 text-center">
+    <% if !@projects.empty? %>
+      <% current_workspace = "" %>
+      <% current_team      = "" %>
+      <% @projects.each do |project| %>
+        <% new_workspace = project['workspace']['name'] %>
+        <% new_team      = project['team']['name'] %>
+        <% if new_workspace != current_workspace %>
+          <h1><%= "#{new_workspace}" %></h1>
+          <% current_workspace = new_workspace %>
+        <% end %>
+        <% if new_team != current_team %>
+          <h3><%= "#{new_team}" %></h3>
+          <% current_team = new_team %>
+        <% end %>
+        <p>
+          <%= link_to project['name'], report_path(project: { id: project['id'], name: project['name']}) %>
+        </p>
+      <% end %>
     <% end %>
-    <% if new_team != current_team %>
-      <h3><%= "#{new_team}" %></h3>
-      <% current_team = new_team %>
-    <% end %>
-    <p>
-      <%= link_to project['name'], report_path(project: { id: project['id'], name: project['name']}) %>
-    </p>
-  <% end %>
-<% end %>
+  </div>
+</div>
