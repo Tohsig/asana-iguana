@@ -1,9 +1,9 @@
 <div class="row">
   <div class="col-md-6 col-md-offset-3 text-center">
     <h1><%= @project_name %></h1>
-    <%= link_to 'Back to Projects List', form_path %>
+    <%= link_to 'Back to Projects List', projects_path %>
 
-    <%= form_tag({controller: "workspaces", action: "report"}, method: "get") do %>
+    <%= form_tag({controller: "projects", action: "show"}, method: "get") do %>
       <%= hidden_field_tag "project[id]", @project_id %>
       <%= hidden_field_tag "project[name]", @project_name %>
       <div class="row input">
@@ -29,9 +29,9 @@
         <% @report.each do |key, value| %>
           <p>
             <% if key != "Unassigned" %>
-              <h4><%= key %> completed <%= value.sum %> points</h4>
+              <h4><%= key %>: <%= value.sum %> points</h4>
             <% else %>
-              <h4><%= value.sum %> points were completed, but unassigned</h4>
+              <h4>Unassigned: <%= value.sum %> points</h4>
             <% end %>
           </p>
         <% end %>
