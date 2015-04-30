@@ -2,10 +2,35 @@
   <div class="col-md-4 col-md-offset-4 text-center">
     <h2>Enter your Asana API Key:</h2>
     <%= form_tag({controller: "projects", action: "index"}, method: "get", class: "form_control") do %>
-      <%= text_field_tag "user[api_key]", '', autocomplete: "off" %>
+      <%= text_field_tag "user[api_key]", '', autocomplete: "off", id: "home-input" %>
       <p>
-        <%= submit_tag "Get Started", class: "btn btn-default" %>
+        <%= submit_tag "List Projects", class: "btn btn-primary btn-lg" %>
       </p>
     <% end %>
+  </div>
+</div>
+<div class="row text-center" id="overview-box">
+  <div class="row">
+    <div class="col-md-10 col-md-offset-1">
+      <div class="col-md-4">
+        <h3>What is this?</h3>
+        <p>It's a tool to quickly tally up Agile story points based solely off
+        of Asana tags! Right now the report is just a quick per-user breakdown,
+        but we'll be adding more detail.</p>
+
+      </div>
+      <div class="col-md-4">
+        <h3>Setting up Asana</h3>
+        <p>All you have to do is add numeric tags to your existing tasks in
+        Asana. You can still add other tags too; this tool will ignore any tag
+        that isn't just a plain number.</p>
+      </div>
+      <div class="col-md-4">
+        <h3>View Report</h3>
+        <p>To tally the points, just enter your API key above and select your
+        project from the list. By default you'll be shown the totals for the
+        current week, but you can select any date range.</p>
+      </div>
+    </div>
   </div>
 </div>

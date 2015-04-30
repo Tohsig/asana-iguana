@@ -1,7 +1,7 @@
 # Asana Iguana - Points counter for Asana
-This is a simple webapp that speeds up the process of tracking an Agile-style points system in Asana. I threw together the initial version over the course of a few days. Currently all it does is tally points-per-person (based off of tasks with number tags) for any given date range. If there's interest, I'll probably expand it further.  
+This is a simple webapp that speeds up the process of tracking an Agile-style points system in Asana. I threw together the initial version over the course of a few days. Currently all it does is tally points-per-person (based off of tasks with number tags) for any given date range. I'll be expanding it further.
 
-Hosted site: [asanaiguana.jotdashed.com](https://asanaiguana.jotdashed.com)
+Hosted site: [https://asana-iguana.herokuapp.com/](https://asana-iguana.herokuapp.com/)
 
 ## Feature Backlog
 In no particular order:
