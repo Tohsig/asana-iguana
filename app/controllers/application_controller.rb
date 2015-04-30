@@ -3,10 +3,6 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
 
-  def key_valid?(api_key)
-
-  end
-
   def set_base_path(api_key)
     RestClient::Resource.new('https://app.asana.com/api/1.0/',
                                     user: api_key, password: '')
