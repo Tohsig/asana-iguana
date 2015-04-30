@@ -31,11 +31,11 @@ class ProjectsController < ApplicationController
 
     @tasks = get_tasks(base_path, @project_id, @start_date, @end_date)
 
-    # if @tasks
-    #   @report = generate_report(@tasks)
-    # else
-    #   @report = false
-    # end
+    if @tasks
+      @report = generate_report(@tasks)
+    else
+      @report = false
+    end
   end
 
   private
