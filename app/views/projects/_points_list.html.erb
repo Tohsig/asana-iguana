@@ -1,0 +1,20 @@
+<div class="row">
+  <div class="col-md-6 col-md-offset-3 text-center">
+    <h3><%= @start_date.to_s(:long) %> to <%= @end_date.to_s(:long) %></h3>
+    <p>
+      <% if @report %>
+        <% @report.each do |key, value| %>
+          <p>
+            <% if key != "Unassigned" %>
+              <h4><%= key %>: <%= value.sum %> points</h4>
+            <% else %>
+              <h4>Unassigned: <%= value.sum %> points</h4>
+            <% end %>
+          </p>
+        <% end %>
+      <% else %>
+        <p>No tasks with points for this date range.</p>
+      <% end %>
+    </p>
+  </div>
+</div>
