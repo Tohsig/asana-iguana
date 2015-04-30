@@ -2,7 +2,7 @@
   <div class="col-md-4 col-md-offset-4 text-center">
     <h2>Enter your API Key:</h2>
     <%= form_tag({controller: "workspaces", action: "form"}, method: "get", class: "form_control") do %>
-      <%= text_field_tag "user[api_key]" %>
+      <%= text_field_tag "user[api_key]", '', autocomplete: "off" %>
       <p>
         <%= submit_tag "Get Started", class: "btn btn-default" %>
       </p>
