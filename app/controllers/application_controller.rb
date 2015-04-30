@@ -32,6 +32,7 @@ class ApplicationController < ActionController::Base
   end
 
   def get_tasks(base_path, project, start_date, end_date)
+    tasks = []
     begin
       tasks = base_path["projects/#{project}/tasks?opt_fields=tags.name,assignee.name,completed_at&completed_since=#{start_date.to_time.iso8601}"].get
     rescue => e
