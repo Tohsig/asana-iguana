@@ -34,15 +34,15 @@ class ApplicationController < ActionController::Base
   def get_tasks(base_path, project, start_date, end_date)
     tasks = []
     begin
-      tasks = base_path["projects/#{project}/tasks?opt_fields=tags.name,assignee.name,completed_at&completed_since=#{start_date.to_time.iso8601}"].get
+      tasks = base_path["projects/#{project}/tasks?opt_fields=tags.name,assignee.name,completed_at&completed_since=#{start_date.to_time.iso8601}"]
     rescue => e
       flash.now[:danger] = "Sorry, something went wrong. Please try again."
     end
-
-    tasks.empty? ? false : tasks = convert_to_json(tasks)
-    tasks.empty? ? false : tasks = trim_end_date(tasks, end_date)
-    tasks.empty? ? false : tasks = remove_extra_tags(tasks)
-    tasks.empty? ? false : tasks = fix_unassigned(tasks)
+    tasks
+    # tasks.empty? ? false : tasks = convert_to_json(tasks)
+    # tasks.empty? ? false : tasks = trim_end_date(tasks, end_date)
+    # tasks.empty? ? false : tasks = remove_extra_tags(tasks)
+    # tasks.empty? ? false : tasks = fix_unassigned(tasks)
   end
 
   def trim_end_date(tasks, end_date)
