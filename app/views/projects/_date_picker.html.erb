@@ -2,26 +2,31 @@
   <div class="col-md-6 col-md-offset-3 text-center">
     <h1><%= @project_name %></h1>
     <%= link_to 'Back to Projects List', projects_path %>
+  </div>
+</div>
 
-    <%= form_tag({controller: "projects", action: "show"}, method: "get") do %>
-      <%= hidden_field_tag "project[id]", @project_id %>
-      <%= hidden_field_tag "project[name]", @project_name %>
-      <div class="row input">
-        <div class="col-sm-offset-2 col-sm-4">
-          <%= label_tag :start_date, "Start Date", class: "control-label" %>
-          <%= date_field_tag "project[start_date]",
-                             @start_date, class: "form-control date" %>
-        </div>
-        <div class="col-sm-4">
-          <%= label_tag :end_date, "End Date", class: "control-label" %>
+<div class="row">
+  <div class="col-md-6 col-md-offset-3 text-center">
+    <%= button context: :info, data: {toggle: "collapse", target: "#custom-date"} do %>
+    <h3><%= @start_date.to_s(:long) %> to <%= @end_date.to_s(:long) %></h3>
+    <% end %>
+    <div class="collapse" id="custom-date">
+      <%= form_tag({controller: "projects", action: "show"}, method: "get", class: "form-inline input") do %>
+        <%= hidden_field_tag "project[id]", @project_id %>
+        <%= hidden_field_tag "project[name]", @project_name %>
+        <%= date_field_tag "project[start_date]",
+                           @start_date, class: "form-control date" %>
+        <div class="form-group">
+          <%= label_tag "project[end_date]", "to", id: "date-spacer" %>
           <%= date_field_tag "project[end_date]",
                              @end_date, class: "form-control date" %>
         </div>
-      </div>
-      <%= submit_tag "Custom Dates", class: "btn btn-primary" %>
-    <% end %>
+        <%= submit_tag "Go!", class: "btn btn-primary", id: "date-btn" %>
+      <% end %>
+    </div>
   </div>
 </div>
+
 <div class="row text-center">
   <div class="col-sm-offset-3 col-sm-2">
     <%= render partial: "week_button", locals: {type: :prev} %>
