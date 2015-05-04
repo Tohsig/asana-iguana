@@ -9,14 +9,51 @@
       <div class="row input">
         <div class="col-sm-offset-2 col-sm-4">
           <%= label_tag :start_date, "Start Date", class: "control-label" %>
-          <%= date_field_tag "project[start_date]", @start_date, class: "form-control date" %>
+          <%= date_field_tag "project[start_date]",
+                             @start_date, class: "form-control date" %>
         </div>
         <div class="col-sm-4">
           <%= label_tag :end_date, "End Date", class: "control-label" %>
-          <%= date_field_tag "project[end_date]", @end_date, class: "form-control date" %>
+          <%= date_field_tag "project[end_date]",
+                             @end_date, class: "form-control date" %>
         </div>
       </div>
       <%= submit_tag "Change Dates", class: "btn btn-primary" %>
+    <% end %>
+  </div>
+</div>
+<div class="row text-center">
+  <div class="col-sm-offset-3 col-sm-2">
+    <%= form_tag({controller: "projects", action: "show"}, method: "get") do %>
+      <%= hidden_field_tag "project[id]", @project_id %>
+      <%= hidden_field_tag "project[name]", @project_name %>
+      <%= hidden_field_tag "project[start_date]",
+                           set_week(start_date: @start_date, kind: :prev) %>
+      <%= hidden_field_tag "project[end_date]",
+                           set_week(end_date: @end_date, kind: :prev) %>
+      <%= submit_tag "<- Week", class: "btn btn-info" %>
+    <% end %>
+  </div>
+  <div class="col-sm-2">
+    <%= form_tag({controller: "projects", action: "show"}, method: "get") do %>
+      <%= hidden_field_tag "project[id]", @project_id %>
+      <%= hidden_field_tag "project[name]", @project_name %>
+      <%= hidden_field_tag "project[start_date]",
+                           set_week(start_date: @start_date, kind: :this) %>
+      <%= hidden_field_tag "project[end_date]",
+                           set_week(end_date: @start_date, kind: :this) %>
+      <%= submit_tag "This Week", class: "btn btn-info" %>
+    <% end %>
+  </div>
+  <div class="col-sm-2">
+    <%= form_tag({controller: "projects", action: "show"}, method: "get") do %>
+      <%= hidden_field_tag "project[id]", @project_id %>
+      <%= hidden_field_tag "project[name]", @project_name %>
+      <%= hidden_field_tag "project[start_date]",
+                           set_week(start_date: @start_date, kind: :next) %>
+      <%= hidden_field_tag "project[end_date]",
+                           set_week(end_date: @start_date, kind: :next) %>
+      <%= submit_tag "Week ->", class: "btn btn-info" %>
     <% end %>
   </div>
 </div>
