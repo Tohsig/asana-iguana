@@ -24,7 +24,8 @@ class ApplicationController < ActionController::Base
       end
       return false
     end
-    convert_to_json(projects)
+    projects = convert_to_json(projects)
+    projects.sort_by {|p| p['workspace']['name']}
   end
 
   def get_tasks(base_path, project, start_date, end_date)
