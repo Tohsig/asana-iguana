@@ -1,23 +1,26 @@
 module ProjectsHelper
-  def set_week(type: false, start_date: false, end_date: false)
-    case type
+  def set_week(week_type: false, date_type: false, start_date: false)
+    case week_type
     when :prev
-      if start_date
+      case date_type
+      when :start
         start_date - start_date.wday - 7
-      elsif end_date
-        end_date - end_date.wday - 1
+      when :end
+        start_date - start_date.wday - 1
       end
     when :this
-      if start_date
+      case date_type
+      when :start
         Date.today - Date.today.wday
-      elsif end_date
+      when :end
         Date.today - Date.today.wday + 6
       end
     when :next
-      if start_date
+      case date_type
+      when :start
         start_date - start_date.wday + 7
-      elsif end_date
-        end_date - end_date.wday + 13
+      when :end
+        start_date - start_date.wday + 13
       end
     else
       false

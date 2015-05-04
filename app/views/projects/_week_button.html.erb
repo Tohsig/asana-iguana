@@ -2,8 +2,8 @@
   <%= hidden_field_tag "project[id]", @project_id %>
   <%= hidden_field_tag "project[name]", @project_name %>
   <%= hidden_field_tag "project[start_date]",
-                       set_week(start_date: @start_date, type: type) %>
+                       set_week(start_date: @start_date, week_type: type, date_type: :start) %>
   <%= hidden_field_tag "project[end_date]",
-                       set_week(end_date: @start_date, type: type) %>
+                       set_week(start_date: @start_date, week_type: type, date_type: :end) %>
   <%= submit_tag "#{button_text(type)}", class: "btn btn-info" %>
 <% end %>
