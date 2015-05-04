@@ -23,7 +23,7 @@ class ProjectsController < ApplicationController
 
     if project_params[:start_date].nil?
       @start_date = Date.today - Date.today.wday
-      @end_date   = Date.today
+      @end_date   = @start_date + 6
     else
       @start_date = Date.parse(project_params[:start_date])
       @end_date   = Date.parse(project_params[:end_date])
