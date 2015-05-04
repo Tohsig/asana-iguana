@@ -1,5 +1,4 @@
-
-<div class="row">
+<div class="row points-list">
   <div class="col-md-6 col-md-offset-3 text-center">
       <% if @report %>
         <% @report.each do |key, value| %>
@@ -13,7 +12,7 @@
           </div>
         <% end %>
       <% else %>
-        <p>No tasks with points for this date range.</p>
+        <%= alert_box 'No tasks with points for this date range.' %>
       <% end %>
   </div>
 </div>

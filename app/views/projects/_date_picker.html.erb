@@ -7,10 +7,7 @@
 
 <div class="row">
   <div class="col-md-6 col-md-offset-3 text-center">
-    <%= button context: :info, data: {toggle: "collapse", target: "#custom-date"} do %>
-    <h3><%= @start_date.to_s(:long) %> to <%= @end_date.to_s(:long) %></h3>
-    <% end %>
-    <div class="collapse" id="custom-date">
+    <div class="" id="custom-date">
       <%= form_tag({controller: "projects", action: "show"}, method: "get", class: "form-inline input") do %>
         <%= hidden_field_tag "project[id]", @project_id %>
         <%= hidden_field_tag "project[name]", @project_name %>
@@ -24,6 +21,7 @@
         <%= submit_tag "Go!", class: "btn btn-primary", id: "date-btn" %>
       <% end %>
     </div>
+    <h3><%= @start_date.to_s(:long) %> to <%= @end_date.to_s(:long) %></h3>
   </div>
 </div>
 
